@@ -29,7 +29,7 @@ addLayer("p", {
     upgrades: {
         11: {
             title: "Begin",
-            description: "Start generating points.",
+            description: "Start generating points",
             cost: new Decimal(1),
         },
         12: {
@@ -45,10 +45,12 @@ addLayer("p", {
         },
         13: {
             title: "Production synergy",
-            description: "Prestige points boost point production.",
+            description: "Prestige points boost point production",
             cost: new Decimal(2),
             effect() {
-                return player[this.layer].points.add(1).pow(0.5)
+                let eff = new Decimal(player[this.layer].points.add(1).pow(0.5))
+                if (hasUpgrade('p', 23)) eff = eff.times(upgradeEffect('p', 23))
+                return eff
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
             unlocked() {
@@ -63,7 +65,9 @@ addLayer("p", {
             description: "Points boost prestige point production",
             cost: new Decimal(5),
             effect() {
-                return player.points.add(1).pow(0.15)
+                let eff = new Decimal(player.points.add(1).pow(0.15))
+                if (hasUpgrade('p', 23)) eff = eff.times(upgradeEffect('p', 23))
+                return eff
             },
             effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
             unlocked() {
@@ -72,6 +76,38 @@ addLayer("p", {
                 else
                  return false
             }
-        }
+        },
+        22: {
+            title: "Self synergy",
+            description: "Points boost their own production",
+            cost: new Decimal(8),
+            effect() {
+                let eff = new Decimal(player.points.add(1).pow(0.075))
+                if (hasUpgrade('p', 23)) eff = eff.times(upgradeEffect('p', 23))
+                return eff
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+            unlocked() {
+                if (hasUpgrade('p', 21))
+                 return true
+                else
+                 return false
+            }
+        },
+        23: {
+            title: "Synergy synergy",
+            description: "Prestige points and points boost synergy effects",
+            cost: new Decimal(15),
+            effect() {
+                return player.points.add(1).pow(0.3).add(player[this.layer].points).pow(0.1)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+            unlocked() {
+                if (hasUpgrade('p', 22) && hasUpgrade('p', 13))
+                 return true
+                else
+                 return false
+            }
+        },
     }
 })
