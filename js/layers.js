@@ -118,7 +118,7 @@ addLayer("a", {
     position: 0,
     branches: [ "p" ],
     startData() { return {
-        unlocked: false,
+        unlocked: true,
 		points: new Decimal(0),
         knowledgePoints: new Decimal(0)
     }},
@@ -137,12 +137,12 @@ addLayer("a", {
         return new Decimal(1)
     },
     row: 1,
-    layerShown(){
-        if (player.points.gte(100) || this.layer.unlocked)
-        return true
-        else
-        return false
-    },
+    //layerShown(){
+        //if (player.points.gte(100))  //|| this.layer.unlocked
+        // return true
+        //else
+        // return false
+    //},
     canBuyMax(){
         return false
     },
