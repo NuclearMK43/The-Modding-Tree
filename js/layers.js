@@ -15,6 +15,7 @@ addLayer("p", {
     exponent: 0.5, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
+        if (hasUpgrade('p', 21)) mult = mult.times(upgradeEffect('p', 21))
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -30,6 +31,47 @@ addLayer("p", {
             title: "Begin",
             description: "Start generating points.",
             cost: new Decimal(1),
+        },
+        12: {
+            title: "Improved Production",
+            description: "generate points 50% faster",
+            cost: new Decimal(1),
+            unlocked() {
+                if (hasUpgrade('p', 11))
+                 return true
+                else
+                 return false
+            }
+        },
+        13: {
+            title: "Production synergy",
+            description: "Prestige points boost point production.",
+            cost: new Decimal(2),
+            effect() {
+                return player[this.layer].points.add(1).pow(0.5)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+            unlocked() {
+                if (hasUpgrade('p', 11))
+                 return true
+                else
+                 return false
+            }
+        },
+        21: {
+            title: "Reverse synergy",
+            description: "Points boost prestige point production",
+            cost: new Decimal(5),
+            effect() {
+                return player.points.add(1).pow(0.15)
+            },
+            effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+            unlocked() {
+                if (hasUpgrade('p', 12))
+                 return true
+                else
+                 return false
+            }
         }
     }
 })
