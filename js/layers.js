@@ -111,3 +111,49 @@ addLayer("p", {
         },
     }
 })
+
+addLayer("a", {
+    name: "Advancements",
+    symbol: "AV",
+    position: 0,
+    branches: [ "p" ],
+    startData() { return {
+        unlocked: false,
+		points: new Decimal(0),
+        knowledgePoints: new Decimal(0)
+    }},
+    color: "#FF27AC",
+    requires: new Decmial(200),
+    resource: "Advancement points",
+    baseResource: "points",
+    baseAmount() {return player.points},
+    type: "static",
+    exponent: 0.4,
+    gainMult(){
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp(){
+        return new Decimal(1)
+    },
+    row: 1,
+    layerShown(){
+        if (player.points.gte(100) || this.layer.unlocked)
+        return true
+        else
+        return false
+    },
+    canBuyMax(){
+        return false
+    },
+    update(diff){
+        knowledgePoints = knowledgePoints.add(player[this.layer].points.pow(1.5))
+    },
+    milestones: {
+        0: {
+            requirementDescription: "100 knowledge points",
+            effectDescription: "TBA",
+            done() { return knowledgePoints.gte(100) },
+        }
+    }
+})
