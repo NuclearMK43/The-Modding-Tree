@@ -53,6 +53,7 @@ function getPointGen() {
 	if (hasUpgrade('p', 12)) gain = gain.times(1.5)
 	if (hasUpgrade('p', 13)) gain = gain.times(upgradeEffect('p', 13))
 	if (hasUpgrade('p', 22)) gain = gain.times(upgradeEffect('p', 22))
+	if (player['l'].points.gte(3)) gain = gain.times(player['l'].points.minus(2).times(180).divide(player['l'].points).divide(2).times(player['l'].points.pow(0.25)).divide(100).plus(1))
 	return gain
 }
 
